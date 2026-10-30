@@ -20,3 +20,8 @@ edge = r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
 subprocess.run([edge, "--headless", "--disable-gpu", "--hide-scrollbars", "--force-device-scale-factor=1",
                 f"--screenshot={pathlib.Path('social/bluesky.png').resolve()}", "--window-size=1200,1350",
                 html.resolve().as_uri()], check=True)
+
+# 1200x630 link-preview image (og:image) used by the site's Open Graph tags
+subprocess.run([edge, "--headless", "--disable-gpu", "--hide-scrollbars", "--force-device-scale-factor=1",
+                f"--screenshot={pathlib.Path('social/og.png').resolve()}", "--window-size=1200,630",
+                pathlib.Path("social/og.html").resolve().as_uri()], check=True)

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  * { box-sizing:border-box; margin:0; }
+  html,body { width:1200px; height:630px; overflow:hidden; background:#0e0916; color:#f4ecdf; font-family:"Segoe UI",system-ui,sans-serif; }
+  .art { position:relative; width:1200px; height:630px; padding:44px 64px;
+    background:radial-gradient(ellipse at 85% 10%, #3a1f5c 0%, rgba(58,31,92,0) 55%), linear-gradient(#150c22, #0e0916); }
+  .moon { position:absolute; right:80px; top:56px; width:210px; height:210px; border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, #fff3d6, #f2c98a 60%, #c99a5c); box-shadow:0 0 110px 40px rgba(255,190,110,.28); }
+  .moon::after { content:""; position:absolute; inset:0; border-radius:50%;
+    background:radial-gradient(circle at 70% 30%, rgba(150,100,60,.25) 0 10%, transparent 11%), radial-gradient(circle at 30% 65%, rgba(150,100,60,.2) 0 8%, transparent 9%), radial-gradient(circle at 60% 72%, rgba(150,100,60,.18) 0 6%, transparent 7%); }
+  .brand { font-weight:800; letter-spacing:.08em; font-size:22px; position:relative; }
+  .date { font-family:Georgia,"Times New Roman",serif; font-size:210px; line-height:.95; font-weight:900; letter-spacing:-.03em; color:#ff8a3d; margin-top:16px; position:relative;
+    text-shadow:0 0 34px rgba(255,138,61,.55), 0 0 100px rgba(217,89,38,.45); }
+  h1 { font-family:Georgia,"Times New Roman",serif; font-size:54px; line-height:1.1; max-width:860px; margin-top:4px; position:relative; }
+  .foot { position:absolute; left:64px; right:64px; bottom:34px; display:flex; justify-content:space-between; align-items:baseline; color:#cfc3d9; font-size:24px; }
+  .foot b { color:#f4ecdf; font-size:28px; letter-spacing:.02em; }
+  .foot em { font-style:normal; color:#ff8a3d; font-weight:700; }
+</style>
+</head>
+<body>
+<div class="art">
+  <div class="moon"></div>
+  <div class="brand">🎃 DEADLIESTDAY.ORG</div>
+  <div class="date">Oct 31</div>
+  <h1>The deadliest day of the year for child pedestrians.</h1>
+  <div class="foot"><span><em>80</em> children killed on foot on Halloween, vs 43 on the next-worst day</span><b>deadliestday.org</b></div>
+</div>
+</body>
+</html>

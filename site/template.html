@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DeadliestDay.org — Halloween is the deadliest day of the year for child pedestrians</title>
 <meta name="description" content="25 years of NHTSA crash data: more children are killed as pedestrians on October 31 than on any other day of the year. See where it happened.">
+<link rel="canonical" href="https://deadliestday.org/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://deadliestday.org/">
+<meta property="og:title" content="Oct 31: the deadliest day of the year for child pedestrians">
+<meta property="og:description" content="25 years of NHTSA crash data: 80 children killed on foot on Halloween, against 43 on the next-deadliest day.">
+<meta property="og:image" content="https://deadliestday.org/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Oct 31: the deadliest day of the year for child pedestrians. 80 children killed on Halloween versus 43 on the next-deadliest day. deadliestday.org">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎃%3C/text%3E%3C/svg%3E">
 <style>
   :root {
@@ -42,6 +52,12 @@
   .stat span { color:var(--text-secondary); font-size:14px; }
   section.card { background:var(--surface-1); border:1px solid var(--grid); border-radius:12px; padding:22px 22px 18px; margin-bottom:20px; }
   h2 { font-family:var(--serif); font-size:22px; margin:0 0 4px; }
+  .chips { align-items:center; }
+  .chips button { display:inline-flex; align-items:center; padding:4px 11px; font-size:14px; color:var(--text-primary); border-radius:999px; }
+  .chips button i { margin-right:7px; }
+  .chips button[aria-pressed=false] { opacity:.4; }
+  .chips button[aria-pressed=false] i { background:transparent !important; box-shadow:inset 0 0 0 2px var(--text-muted); }
+  .chips em { font-style:normal; color:var(--text-muted); font-size:13px; }
   .sub { color:var(--text-secondary); font-size:14px; margin:0 0 14px; max-width:720px; }
   .legend { display:flex; gap:18px; font-size:14px; color:var(--text-secondary); margin-bottom:8px; flex-wrap:wrap; }
   .legend i { display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:6px; vertical-align:-1px; }
@@ -62,8 +78,16 @@
   th:first-child,td:first-child { text-align:left; }
   [hidden] { display:none; }
   .states path { fill:var(--surface-2); stroke:#4a3a68; stroke-width:.7; }
+  .toast { position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:#f4ecdf; color:#1a1226; padding:10px 16px; border-radius:10px; font-size:14px; opacity:0; transition:opacity .2s; pointer-events:none; z-index:10; }
+  .tools { float:right; display:flex; gap:8px; margin:0 0 8px 12px; }
+  .tools button { font-size:13px; padding:5px 10px; white-space:nowrap; }
+  .tools button[data-act=bsky] { border-color:#3b82f6; color:var(--text-primary); }
+  .tools button[data-act=bsky]:hover { background:#3b82f6; border-color:#3b82f6; }
+  section.card { scroll-margin-top:16px; }
+  @media (max-width:640px) { .tools { float:none; margin:0 0 10px; } }
   footer { color:var(--text-muted); font-size:13px; margin:28px 0 56px; }
   footer b { color:var(--text-secondary); }
+  footer a { color:var(--text-secondary); }
 </style>
 </head>
 <body>
@@ -86,7 +110,7 @@
     <div class="stat"><b>303</b><span>children died on Halloween in all kinds of road crashes, second only to July 4</span></div>
   </div>
 
-  <section class="card">
+  <section class="card" id="s-days">
     <h2>Every day of the year</h2>
     <p class="sub">Each bar is one calendar day, with deaths added up across 2000–2024. Hover for the date.</p>
     <div class="tabs" role="group" aria-label="What to count">
@@ -98,7 +122,7 @@
     <div id="caltable" hidden></div>
   </section>
 
-  <section class="card">
+  <section class="card" id="s-rate">
     <h2>Halloween versus an ordinary day</h2>
     <p class="sub">Average deaths per day, 2000–2024: Oct 31 against every other day of the year.</p>
     <div class="legend">
@@ -106,10 +130,10 @@
       <span><i style="background:var(--series-1)"></i>Every other day</span>
     </div>
     <svg id="ratio" viewBox="0 0 900 290" role="img" aria-label="Halloween compared with an average day for several groups"></svg>
-    <p class="note">Children are hit hardest. Across everyone on the road the bump is small (about 1.1×): Halloween is a day for kids on foot, not a day when drivers die more.</p>
+    <p class="note">Children are hit hardest. Across everyone on the road the increase is small (about 1.1×): Halloween is a day for kids on foot, not a day when drivers die more.</p>
   </section>
 
-  <section class="card">
+  <section class="card" id="s-where">
     <h2>Where it happened</h2>
     <p class="sub">Every pedestrian killed on October 31 from 2000 to 2024 with a recorded crash location. Hover a dot for details.</p>
     <div class="tabs" role="group" aria-label="Who to show">
@@ -123,13 +147,13 @@
     <p class="sub" id="mapnote" style="margin:10px 0 0"></p>
   </section>
 
-  <section class="card">
+  <section class="card" id="s-who">
     <h2>Who dies on the road on Halloween</h2>
     <p class="sub" id="typesub"></p>
     <svg id="types" viewBox="0 0 900 190" role="img" aria-label="Halloween road deaths by role"></svg>
   </section>
 
-  <section class="card">
+  <section class="card" id="s-weekday">
     <h2>Does it matter what day of the week Halloween falls on?</h2>
     <p class="sub">Average pedestrian deaths on Halloween, grouped by weekday, next to an ordinary day of that same weekday.</p>
     <div class="tabs" role="group" aria-label="Age group">
@@ -143,7 +167,7 @@
     <p class="note" id="satnote"></p>
   </section>
 
-  <section class="card">
+  <section class="card" id="s-years">
     <h2>Every Halloween, 2000–2024</h2>
     <p class="sub">Pedestrians fatally injured on October 31 of each year.</p>
     <div class="legend">
@@ -156,8 +180,20 @@
     <div id="tablewrap" hidden></div>
   </section>
 
+  <section class="card" id="s-users">
+    <h2>Road deaths by type of road user, 2000–2024</h2>
+    <p class="sub" id="ulead"></p>
+    <div class="tabs" role="group" aria-label="Measure">
+      <button id="u-n" aria-pressed="true">Number of deaths</button><button id="u-p" aria-pressed="false">Share of all deaths</button>
+    </div>
+    <div class="legend chips" id="ulegend"></div>
+    <svg id="users" viewBox="0 0 900 340" role="img" aria-label="Stacked bars of US road deaths per year by type of road user"></svg>
+    <p class="note" id="usernote"></p>
+  </section>
+
   <footer>
-    <b>Source:</b> NHTSA Fatality Analysis Reporting System (FARS), National CSV files 2000–2024 (2025 not yet released). Deaths are people with injury severity "fatal" (died within 30 days), by crash date. Pedestrians are person type 5; children are under 18, and unknown ages are not counted as children. "All road deaths" means every person killed in a crash on a public road, whether a driver, passenger, pedestrian or cyclist. "Evening" is 6 pm to midnight by crash hour. Map locations come from the crash report's latitude and longitude; deaths without usable coordinates, and those in Alaska and Hawaii, are not drawn. Totals are small for single weekdays (3–4 Halloweens each), so those comparisons are suggestive, not conclusive. The roughly 3× child-pedestrian risk is consistent with a 2019 <em>JAMA Pediatrics</em> study. Analysis code: <code>halloween_deadliest.py</code>, <code>halloween_compare.py</code>, <code>halloween_all.py</code>.
+    <b>Source:</b> <a href="https://www.nhtsa.gov/research-data/fatality-analysis-reporting-system-fars">NHTSA Fatality Analysis Reporting System (FARS)</a>, <a href="https://www.nhtsa.gov/file-downloads?p=nhtsa/downloads/FARS/">National CSV files</a> 2000–2024 (2025 not yet released). Deaths are people with injury severity "fatal" (died within 30 days), by crash date. Pedestrians are person type 5; bicyclists include other cyclists; motorcyclists are drivers and passengers of motorcycles (vehicle body types 80–89); "other" includes occupants of parked vehicles and unknown road users; children are under 18, and unknown ages are not counted as children. "All road deaths" means every person killed in a crash on a public road, whether a driver, passenger, pedestrian or cyclist. "Evening" is 6 pm to midnight by crash hour. Map locations come from the crash report's latitude and longitude; deaths without usable coordinates, and those in Alaska and Hawaii, are not drawn. Totals are small for single weekdays (3–4 Halloweens each), so those comparisons are suggestive, not conclusive. The roughly 3× child-pedestrian risk is consistent with a 2019 <em>JAMA Pediatrics</em> study. Code and data: <a href="https://github.com/edgarnett/deadliestday">github.com/edgarnett/deadliestday</a>.
+    <p style="margin-top:14px"><b>Independent project.</b> If you would like to do something about this problem, the author suggests considering advocating for car-free spaces, technologies like auto-braking and speed limiters, and policies like street redesigns, or donating to organizations like <a href="https://ggwashcommons.org/donate" target="_blank" rel="noopener">GGWash Commons</a>, which works toward a region where housing is abundant and affordable and it is safe and easy to walk, bike or take public transit.</p>
   </footer>
 </main>
 <div class="tip" id="tip"></div>
@@ -265,6 +301,46 @@ $("caltoggle").onclick=()=>{const w=$("caltable");w.hidden=!w.hidden;$("caltoggl
     b.addEventListener("mousemove",ev=>showTip(ev,`<b>${r[0]}</b><br>${r[1].toLocaleString()} deaths`));b.addEventListener("mouseleave",hide);});
 })();
 
+// 4b. all road deaths by user type, with selectable groups
+(function(){const T=D.usertypes,yrs=Object.keys(T.years).map(Number),svg=$("users");
+  const ORDER=["Drivers","Passengers","Pedestrians","Motorcyclists","Bicyclists","Other / unknown"],COL=["#3987e5","#199e70","#d95926","#9085e9","#c98500","#d55181"];
+  const tot=y=>ORDER.reduce((s,c)=>s+T.years[y][c],0);
+  let sel=new Set(ORDER),share=false;
+  const f=yrs[0],l=yrs[yrs.length-1];
+  const sum=yrs.reduce((s,y)=>s+tot(y),0),avg=Math.round(sum/yrs.length/100)*100,perDay=Math.round(sum/D.n_days);
+  $("ulead").textContent=`It's not just Halloween. About ${avg.toLocaleString()} people die every year on American streets, roughly ${perDay} a day.`;
+  const nice=v=>{const p=Math.pow(10,Math.floor(Math.log10(v/4)));for(const k of [1,2,2.5,5,10]){const s=k*p;if(v/s<=5)return{max:Math.ceil(v/s)*s,step:s};}return{max:v,step:v};};
+  function legend(){const box=$("ulegend");box.innerHTML="";
+    ORDER.forEach((c,i)=>{const sp=document.createElement("span"),b=document.createElement("button");
+      b.setAttribute("aria-pressed",sel.has(c));b.title=sel.size===ORDER.length?`Show only ${c}`:(sel.has(c)?`Hide ${c}`:`Add ${c}`);
+      b.innerHTML=`<i style="background:${COL[i]}"></i>${c}`;
+      b.onclick=()=>{if(sel.size===ORDER.length)sel=new Set([c]);else{sel.has(c)?sel.delete(c):sel.add(c);if(!sel.size)sel=new Set(ORDER);}update();};
+      sp.appendChild(b);box.appendChild(sp);});
+    const all=document.createElement("button");all.textContent="Show all";all.setAttribute("aria-pressed","true");all.style.fontSize="13px";all.hidden=sel.size===ORDER.length;
+    all.onclick=()=>{sel=new Set(ORDER);update();};box.appendChild(all);
+    const hint=document.createElement("em");hint.textContent=sel.size===ORDER.length?"Click a group to focus on it, then click more to compare.":"Click groups to add or remove them.";box.appendChild(hint);}
+  function draw(){svg.innerHTML="";const W=900,H=340,m={l:56,r:112,t:12,b:26},iw=W-m.l-m.r,ih=H-m.t-m.b,bw=iw/yrs.length;
+    const cats=ORDER.filter(c=>sel.has(c)),val=(y,c)=>share?T.years[y][c]/tot(y)*100:T.years[y][c];
+    const top=Math.max(...yrs.map(y=>cats.reduce((s,c)=>s+val(y,c),0))),sc=nice(top*1.04),max=sc.max;
+    const yv=v=>m.t+ih-v/max*ih;
+    for(let k=0;k<=max+1e-9;k+=sc.step){el("line",{x1:m.l,x2:W-m.r,y1:yv(k),y2:yv(k),stroke:"var(--grid)"},svg);el("text",{x:m.l-6,y:yv(k)+4,"text-anchor":"end"},svg,share?+k.toFixed(1)+"%":k.toLocaleString());}
+    yrs.forEach((yr,i)=>{const x=m.l+i*bw+bw*.16,w=bw*.68;let cum=0;
+      cats.forEach(c=>{const v=val(yr,c),h=yv(cum)-yv(cum+v)-(cum?1.5:0);
+        el("rect",{x,y:yv(cum+v),width:w,height:Math.max(h,.5),fill:COL[ORDER.indexOf(c)]},svg);cum+=v;});
+      const hit=el("rect",{x:m.l+i*bw,y:m.t,width:bw,height:ih,fill:"transparent"},svg),T0=tot(yr),S=cats.reduce((s,c)=>s+T.years[yr][c],0);
+      hit.addEventListener("mousemove",ev=>showTip(ev,`<b>${yr}</b> · ${T0.toLocaleString()} road deaths in all<br>`+cats.map(c=>`${c}: ${T.years[yr][c].toLocaleString()} (${(T.years[yr][c]/T0*100).toFixed(0)}%)`).join("<br>")+(cats.length>1&&cats.length<ORDER.length?`<br><b>Selected: ${S.toLocaleString()} (${(S/T0*100).toFixed(0)}%)</b>`:"")));hit.addEventListener("mouseleave",hide);
+      if(yr%2===0||yr===l)el("text",{x:x+w/2,y:H-8,"text-anchor":"middle"},svg,yr);});
+    let cum=0,lastY=1e9;
+    cats.forEach(c=>{const v=val(l,c),ym=yv(cum+v/2);if(yv(cum)-yv(cum+v)>=14&&Math.abs(lastY-ym)>=15){el("text",{class:"lbl",x:W-m.r+8,y:ym+4},svg,c);lastY=ym;}cum+=v;});}
+  function note(){const P=y=>T.years[y]["Pedestrians"],cats=ORDER.filter(c=>sel.has(c)),n=y=>cats.reduce((s,c)=>s+T.years[y][c],0);
+    if(sel.size===ORDER.length){const pk=yrs.reduce((a,b)=>P(b)>P(a)?b:a),Y=(c,y)=>T.years[y][c].toLocaleString();
+      return `<b>Deaths of drivers and passengers have fallen; deaths of people outside cars have risen.</b> Drivers: ${Y("Drivers",f)} in ${f} to ${Y("Drivers",l)} in ${l}. Passengers: ${Y("Passengers",f)} to ${Y("Passengers",l)}. Pedestrians: ${Y("Pedestrians",f)} to ${Y("Pedestrians",l)} (peaking at ${P(pk).toLocaleString()} in ${pk}), from ${(P(f)/tot(f)*100).toFixed(0)}% to ${(P(l)/tot(l)*100).toFixed(0)}% of all road deaths. Motorcyclists: ${Y("Motorcyclists",f)} to ${Y("Motorcyclists",l)}. Bicyclists: ${Y("Bicyclists",f)} to ${Y("Bicyclists",l)}.`;}
+    const pk=yrs.reduce((a,b)=>n(b)>n(a)?b:a),ch=(n(l)/n(f)-1)*100,name=cats.length===1?cats[0].toLowerCase().replace(" / unknown","/unknown"):"the selected groups";
+    return `<b>${cats.join(" + ")}:</b> ${n(f).toLocaleString()} deaths in ${f} (${(n(f)/tot(f)*100).toFixed(0)}% of all road deaths) and ${n(l).toLocaleString()} in ${l} (${(n(l)/tot(l)*100).toFixed(0)}%), a ${ch>=0?"rise":"fall"} of ${Math.abs(ch).toFixed(0)}%. The peak for ${name} was ${n(pk).toLocaleString()} in ${pk}.`;}
+  function update(){legend();draw();$("usernote").innerHTML=note();}
+  update();tabs(["u-n","u-p"],id=>{share=id==="u-p";update();});
+})();
+
 // 5. weekday
 const wk=$("wk");
 function drawWk(key){wk.innerHTML="";const W=900,H=290,m={l:34,r:8,t:24,b:44},iw=W-m.l-m.r;
@@ -296,6 +372,7 @@ drawWk("kids");tabs(["t-kids","t-all"],id=>drawWk(id==="t-kids"?"kids":"all"));
   const b=$("toggle"),w=$("tablewrap");
   b.onclick=()=>{w.hidden=!w.hidden;b.textContent=w.hidden?"Show data table":"Hide data table";b.setAttribute("aria-expanded",!w.hidden);};
 })();
+__SHARE__
 </script>
 </body>
 </html>
