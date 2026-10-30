@@ -81,8 +81,8 @@
   .toast { position:fixed; left:50%; bottom:24px; transform:translateX(-50%); background:#f4ecdf; color:#1a1226; padding:10px 16px; border-radius:10px; font-size:14px; opacity:0; transition:opacity .2s; pointer-events:none; z-index:10; }
   .tools { float:right; display:flex; gap:8px; margin:0 0 8px 12px; }
   .tools button { font-size:13px; padding:5px 10px; white-space:nowrap; }
-  .tools button[data-act=bsky] { border-color:#3b82f6; color:var(--text-primary); }
-  .tools button[data-act=bsky]:hover { background:#3b82f6; border-color:#3b82f6; }
+  .tools button[data-act=share] { border-color:var(--series-2); color:var(--text-primary); }
+  .tools button[data-act=share]:hover { background:var(--series-2); }
   section.card { scroll-margin-top:16px; }
   @media (max-width:640px) { .tools { float:none; margin:0 0 10px; } }
   footer { color:var(--text-muted); font-size:13px; margin:28px 0 56px; }
@@ -238,7 +238,7 @@ function drawCal(id){const S=SER[id],svg=$("cal");svg.innerHTML="";const W=900,H
   MN.forEach((n,i)=>el("text",{x:m.l+start(`${pad(i+1)}-01`)*bw,y:H-8},svg,n));
   const rank=ranked.findIndex(r=>r[0]==="10-31")+1,second=ranked[1];
   const notes={
-    "c-kp":`Halloween stands out in a year that is otherwise flat: a typical day has about 26 child pedestrian deaths and the next-highest has ${second[1]}.`,
+    "c-kp":`Halloween has seen ${S.get("10-31")} child pedestrian deaths over the last 25 years: the next-highest has ${second[1]}, and the average is 26.`,
     "c-kr":`Counting children killed in any way on the road (passengers, drivers, cyclists, pedestrians), Halloween ranks #${rank}, behind only ${fmt(top[0])}. After dark, from 6 pm to midnight, it ranks #1 with 158 deaths.`,
     "c-ar":`For everyone, Halloween ranks #${rank} of 366 days. ${fmt(top[0])} is the deadliest (${top[1].toLocaleString()}), followed by Jan 1 and the days around the Labor Day weekend. The claim to the title belongs to children.`};
   $("calnote").textContent=notes[id];

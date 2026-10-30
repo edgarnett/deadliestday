@@ -1,4 +1,4 @@
-// Per-section "Save image" / "Share on Bluesky" buttons.
+// Per-section "Save image" and "Share" buttons.
 // Inlined into index.html by build_site.py (placeholder __SHARE__ in template.html).
 (function(){
   const SITE="https://deadliestday.org/";
@@ -71,15 +71,43 @@
   }
   function shareText(card){return card.id==="s-days"?document.getElementById("calnote").textContent:SHARE[card.id];}
 
+  // image cache per card, cleared whenever the chart redraws (tab / selection change)
+  const cache=new WeakMap();
+  function getBlob(card){
+    if(!cache.has(card))cache.set(card,makeImage(card));
+    return cache.get(card);
+  }
+  const canShareFiles=()=>{try{return matchMedia("(pointer:coarse)").matches&&navigator.canShare&&navigator.canShare({files:[new File([""],"x.png",{type:"image/png"})]});}catch(e){return false;}};
+
+  async function share(card){
+    const text=shareText(card),url=SITE+"#"+card.id;
+    if(canShareFiles()){
+      // phones and tablets: native share sheet with the image attached
+      const blob=await getBlob(card),file=new File([blob],"deadliestday-"+card.id.replace(/^s-/,"")+".png",{type:"image/png"});
+      try{await navigator.share({files:[file],text:text+"\n"+url});}
+      catch(e){if(e.name==="NotAllowedError")say("Tap Share again to open the share sheet.");else if(e.name!=="AbortError")say("Sharing isn't available here. Use Save image instead.");}
+      return;
+    }
+    // computers: open a Bluesky draft with the text and link, and put the image on the clipboard to paste in
+    window.open("https://bsky.app/intent/compose?text="+encodeURIComponent(text+"\n"+url),"_blank","noopener");
+    try{
+      const blob=await getBlob(card);
+      await navigator.clipboard.write([new ClipboardItem({"image/png":blob})]);
+      say("Image copied. Paste it into your Bluesky post (Ctrl+V or Cmd+V).");
+    }catch(e){
+      if(await save(card))say("Image saved. Attach it to your Bluesky post.");
+    }
+  }
+
   document.querySelectorAll("section.card[id^=s-]").forEach(card=>{
     const tools=document.createElement("div");tools.className="tools";
-    tools.innerHTML='<button data-act="img" title="Download this chart as a PNG">Save image</button><button data-act="bsky" title="Opens a Bluesky post with a link to this section, and saves the image so you can attach it">🦋 Share on Bluesky</button>';
+    tools.innerHTML='<button data-act="img" title="Download this chart as a PNG">Save image</button><button data-act="share" title="Share this chart with its image">Share</button>';
     card.insertBefore(tools,card.firstChild);
+    const svg=card.querySelector("svg");
+    if(svg)new MutationObserver(()=>cache.delete(card)).observe(svg,{childList:true});
+    const sb=tools.querySelector("[data-act=share]");
+    ["pointerenter","focus","touchstart"].forEach(ev=>sb.addEventListener(ev,()=>getBlob(card),{passive:true}));
     tools.querySelector("[data-act=img]").onclick=async()=>{if(await save(card))say("Image saved.");};
-    tools.querySelector("[data-act=bsky]").onclick=async()=>{
-      const url="https://bsky.app/intent/compose?text="+encodeURIComponent(shareText(card)+"\n"+SITE+"#"+card.id);
-      window.open(url,"_blank","noopener");
-      if(await save(card))say("Image saved. Attach it to your Bluesky post.");
-    };
+    sb.onclick=()=>share(card);
   });
 })();
