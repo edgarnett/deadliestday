@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DeadliestDay.org — Halloween is the deadliest day of the year for child pedestrians</title>
+<meta name="description" content="25 years of NHTSA crash data: more children are killed as pedestrians on October 31 than on any other day of the year. See where it happened.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🎃%3C/text%3E%3C/svg%3E">
+<style>
+  :root {
+    color-scheme: dark;
+    --page:#0e0916; --surface-1:#1a1226; --surface-2:#241a35; --grid:#33264a;
+    --text-primary:#f4ecdf; --text-secondary:#cfc3d9; --text-muted:#a095b2;
+    --series-1:#9085e9;   /* violet: everyone / ordinary days */
+    --series-2:#d95926;   /* pumpkin: Halloween / children */
+    --glow:#ff8a3d;
+    --serif: Georgia, "Times New Roman", serif;
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--page); color:var(--text-primary); font:16px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; }
+  .wrap { max-width:980px; margin:0 auto; padding:0 20px; }
+  header.hero { position:relative; overflow:hidden; padding:26px 0 70px;
+    background:radial-gradient(ellipse at 85% 10%, #3a1f5c 0%, rgba(58,31,92,0) 55%), linear-gradient(#150c22, #0e0916); }
+  .moon { position:absolute; right:7%; top:48px; width:clamp(90px,16vw,170px); aspect-ratio:1; border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, #fff3d6, #f2c98a 60%, #c99a5c); box-shadow:0 0 90px 30px rgba(255,190,110,.28); opacity:.95; }
+  .moon::after { content:""; position:absolute; inset:0; border-radius:50%;
+    background:radial-gradient(circle at 70% 30%, rgba(150,100,60,.25) 0 10%, transparent 11%), radial-gradient(circle at 30% 65%, rgba(150,100,60,.2) 0 8%, transparent 9%), radial-gradient(circle at 60% 72%, rgba(150,100,60,.18) 0 6%, transparent 7%); }
+  .bat { position:absolute; font-size:26px; opacity:.85; animation:drift 9s ease-in-out infinite; filter:drop-shadow(0 0 4px #000); }
+  .b1 { right:22%; top:36px; } .b2 { right:30%; top:110px; font-size:20px; animation-delay:-3s; } .b3 { right:14%; top:170px; font-size:18px; animation-delay:-6s; }
+  @keyframes drift { 0%,100% { transform:translate(0,0) rotate(-6deg); } 50% { transform:translate(-18px,10px) rotate(6deg); } }
+  @media (prefers-reduced-motion: reduce) { .bat { animation:none; } }
+  .brand { position:relative; font-weight:800; letter-spacing:.06em; font-size:14px; display:flex; align-items:center; gap:8px; }
+  .brand small { opacity:.6; font-weight:500; margin-left:auto; letter-spacing:0; }
+  .date { position:relative; font-family:var(--serif); font-size:clamp(86px,21vw,200px); line-height:.9; font-weight:900; letter-spacing:-.03em; margin:46px 0 6px;
+    color:var(--glow); text-shadow:0 0 28px rgba(255,138,61,.55), 0 0 90px rgba(217,89,38,.45); }
+  h1 { position:relative; font-family:var(--serif); font-size:clamp(26px,5vw,44px); line-height:1.1; margin:0 0 16px; letter-spacing:-.01em; max-width:740px; }
+  .lede { position:relative; font-size:18px; color:var(--text-secondary); max-width:620px; margin:0; }
+  .stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; margin:-38px 0 24px; position:relative; }
+  .stat { background:var(--surface-1); border:1px solid var(--grid); border-radius:12px; padding:18px 20px; }
+  .stat b { display:block; font-family:var(--serif); font-size:44px; line-height:1; letter-spacing:-.02em; }
+  .stat.hot b { color:var(--glow); }
+  .stat span { color:var(--text-secondary); font-size:14px; }
+  section.card { background:var(--surface-1); border:1px solid var(--grid); border-radius:12px; padding:22px 22px 18px; margin-bottom:20px; }
+  h2 { font-family:var(--serif); font-size:22px; margin:0 0 4px; }
+  .sub { color:var(--text-secondary); font-size:14px; margin:0 0 14px; max-width:720px; }
+  .legend { display:flex; gap:18px; font-size:14px; color:var(--text-secondary); margin-bottom:8px; flex-wrap:wrap; }
+  .legend i { display:inline-block; width:12px; height:12px; border-radius:3px; margin-right:6px; vertical-align:-1px; }
+  .legend i.dot { border-radius:50%; }
+  svg { width:100%; height:auto; display:block; overflow:visible; }
+  svg text { fill:var(--text-muted); font-size:12px; font-family:inherit; }
+  svg .lbl { fill:var(--text-primary); font-weight:600; }
+  svg .callout { fill:var(--glow); font-size:13px; font-weight:700; }
+  .tabs { display:inline-flex; border:1px solid var(--grid); border-radius:8px; overflow:hidden; margin:0 8px 10px 0; flex-wrap:wrap; }
+  .tabs button { border:0; border-radius:0; margin:0; background:none; }
+  .tabs button[aria-pressed=true] { background:var(--series-2); color:#fff; }
+  button { font:inherit; font-size:14px; background:none; color:var(--text-secondary); border:1px solid var(--grid); border-radius:8px; padding:6px 14px; cursor:pointer; }
+  button:hover { border-color:var(--series-2); }
+  .note { border-left:4px solid var(--series-2); padding:2px 0 2px 14px; color:var(--text-secondary); font-size:15px; margin:14px 0 0; }
+  .tip { position:fixed; pointer-events:none; background:#f4ecdf; color:#1a1226; padding:8px 10px; border-radius:8px; font-size:13px; line-height:1.4; opacity:0; transition:opacity .1s; z-index:5; }
+  table { border-collapse:collapse; width:100%; font-size:14px; margin-top:12px; }
+  th,td { text-align:right; padding:5px 8px; border-bottom:1px solid var(--grid); }
+  th:first-child,td:first-child { text-align:left; }
+  [hidden] { display:none; }
+  .states path { fill:var(--surface-2); stroke:#4a3a68; stroke-width:.7; }
+  footer { color:var(--text-muted); font-size:13px; margin:28px 0 56px; }
+  footer b { color:var(--text-secondary); }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="moon" aria-hidden="true"></div>
+  <span class="bat b1" aria-hidden="true">🦇</span><span class="bat b2" aria-hidden="true">🦇</span><span class="bat b3" aria-hidden="true">🦇</span>
+  <div class="wrap">
+    <div class="brand">🎃 DEADLIESTDAY.ORG<small>NHTSA FARS · 2000–2024</small></div>
+    <div class="date">Oct 31</div>
+    <h1>The deadliest day of the year for child pedestrians.</h1>
+    <p class="lede">In 25 years of federal crash records, more children under 18 were killed on foot on Halloween than on any other day, by a wide margin.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="stats">
+    <div class="stat hot"><b>80</b><span>children killed as pedestrians on Oct 31, 2000–2024</span></div>
+    <div class="stat"><b>43</b><span>on the next-deadliest days (Oct 25 and Dec 4 tie)</span></div>
+    <div class="stat"><b>3.1×</b><span>the rate of an ordinary day; 4.4× in the evening hours</span></div>
+    <div class="stat"><b>303</b><span>children died on Halloween in all kinds of road crashes, second only to July 4</span></div>
+  </div>
+
+  <section class="card">
+    <h2>Every day of the year</h2>
+    <p class="sub">Each bar is one calendar day, with deaths added up across 2000–2024. Hover for the date.</p>
+    <div class="tabs" role="group" aria-label="What to count">
+      <button id="c-kp" aria-pressed="true">Child pedestrians</button><button id="c-kr" aria-pressed="false">Children, all road deaths</button><button id="c-ar" aria-pressed="false">Everyone, all road deaths</button>
+    </div>
+    <svg id="cal" viewBox="0 0 900 300" role="img" aria-label="Bar chart of deaths for each day of the year"></svg>
+    <p class="note" id="calnote"></p>
+    <p style="margin:12px 0 0"><button id="caltoggle" aria-expanded="false">Show the top 10 days</button></p>
+    <div id="caltable" hidden></div>
+  </section>
+
+  <section class="card">
+    <h2>Halloween versus an ordinary day</h2>
+    <p class="sub">Average deaths per day, 2000–2024: Oct 31 against every other day of the year.</p>
+    <div class="legend">
+      <span><i style="background:var(--series-2)"></i>Oct 31</span>
+      <span><i style="background:var(--series-1)"></i>Every other day</span>
+    </div>
+    <svg id="ratio" viewBox="0 0 900 290" role="img" aria-label="Halloween compared with an average day for several groups"></svg>
+    <p class="note">Children are hit hardest. Across everyone on the road the bump is small (about 1.1×): Halloween is a day for kids on foot, not a day when drivers die more.</p>
+  </section>
+
+  <section class="card">
+    <h2>Where it happened</h2>
+    <p class="sub">Every pedestrian killed on October 31 from 2000 to 2024 with a recorded crash location. Hover a dot for details.</p>
+    <div class="tabs" role="group" aria-label="Who to show">
+      <button id="m-all" aria-pressed="true">All pedestrians</button><button id="m-kids" aria-pressed="false">Children only</button>
+    </div>
+    <div class="legend">
+      <span><i class="dot" style="background:var(--series-2)"></i>Under 18</span>
+      <span><i class="dot" style="background:var(--series-1)"></i>18 and over / age unknown</span>
+    </div>
+    <svg id="map" viewBox="0 0 900 560" role="img" aria-label="Dot map of Halloween pedestrian deaths across the contiguous United States"></svg>
+    <p class="sub" id="mapnote" style="margin:10px 0 0"></p>
+  </section>
+
+  <section class="card">
+    <h2>Who dies on the road on Halloween</h2>
+    <p class="sub" id="typesub"></p>
+    <svg id="types" viewBox="0 0 900 190" role="img" aria-label="Halloween road deaths by role"></svg>
+  </section>
+
+  <section class="card">
+    <h2>Does it matter what day of the week Halloween falls on?</h2>
+    <p class="sub">Average pedestrian deaths on Halloween, grouped by weekday, next to an ordinary day of that same weekday.</p>
+    <div class="tabs" role="group" aria-label="Age group">
+      <button id="t-kids" aria-pressed="true">Children under 18</button><button id="t-all" aria-pressed="false">All ages</button>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--series-2)"></i>Halloween that falls on this weekday</span>
+      <span><i style="background:var(--series-1)"></i>Any other day that weekday</span>
+    </div>
+    <svg id="wk" viewBox="0 0 900 290" role="img" aria-label="Halloween deaths by weekday versus ordinary days"></svg>
+    <p class="note" id="satnote"></p>
+  </section>
+
+  <section class="card">
+    <h2>Every Halloween, 2000–2024</h2>
+    <p class="sub">Pedestrians fatally injured on October 31 of each year.</p>
+    <div class="legend">
+      <span><i style="background:var(--series-1)"></i>18 and over, or age unknown</span>
+      <span><i style="background:var(--series-2)"></i>Under 18</span>
+    </div>
+    <svg id="yr" viewBox="0 0 900 300" role="img" aria-label="Stacked bars of Halloween pedestrian deaths per year"></svg>
+    <p class="note"><b>For all ages, pedestrian deaths peak elsewhere.</b> January 1 (590 pedestrian deaths) is higher than Halloween (553). Halloween's record is for children.</p>
+    <p style="margin:12px 0 0"><button id="toggle" aria-expanded="false">Show data table</button></p>
+    <div id="tablewrap" hidden></div>
+  </section>
+
+  <footer>
+    <b>Source:</b> NHTSA Fatality Analysis Reporting System (FARS), National CSV files 2000–2024 (2025 not yet released). Deaths are people with injury severity "fatal" (died within 30 days), by crash date. Pedestrians are person type 5; children are under 18, and unknown ages are not counted as children. "All road deaths" means every person killed in a crash on a public road, whether a driver, passenger, pedestrian or cyclist. "Evening" is 6 pm to midnight by crash hour. Map locations come from the crash report's latitude and longitude; deaths without usable coordinates, and those in Alaska and Hawaii, are not drawn. Totals are small for single weekdays (3–4 Halloweens each), so those comparisons are suggestive, not conclusive. The roughly 3× child-pedestrian risk is consistent with a 2019 <em>JAMA Pediatrics</em> study. Analysis code: <code>halloween_deadliest.py</code>, <code>halloween_compare.py</code>, <code>halloween_all.py</code>.
+  </footer>
+</main>
+<div class="tip" id="tip"></div>
+
+<script>
+const D = __DATA__;
+const NS="http://www.w3.org/2000/svg", tip=document.getElementById("tip");
+const MN=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const $=id=>document.getElementById(id);
+function el(t,a,p,x){const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(x!=null)e.textContent=x;p.appendChild(e);return e;}
+function showTip(ev,h){tip.innerHTML=h;tip.style.opacity=1;tip.style.left=Math.max(8,Math.min(ev.clientX+14,innerWidth-tip.offsetWidth-8))+"px";tip.style.top=(ev.clientY-tip.offsetHeight-12)+"px";}
+const hide=()=>tip.style.opacity=0;
+function grid(svg,m,W,H,max,ticks){const ih=H-m.t-m.b,y=v=>m.t+ih-v/max*ih;
+  ticks.forEach(t=>{el("line",{x1:m.l,x2:W-m.r,y1:y(t),y2:y(t),stroke:"var(--grid)"},svg);el("text",{x:m.l-6,y:y(t)+4,"text-anchor":"end"},svg,t.toLocaleString());});return y;}
+const fmt=md=>{const[m,d]=md.split("-").map(Number);return MN[m-1]+" "+d;};
+const pad=n=>String(n).padStart(2,"0");
+const fmtHour=h=>h==null?"time unknown":((h%12)||12)+(h<12?" am":" pm");
+function tabs(ids,fn){ids.forEach(id=>$(id).onclick=()=>{ids.forEach(j=>$(j).setAttribute("aria-pressed",j===id));fn(id);});}
+
+// per-day lookups
+const road={},ped={};D.roadcal.forEach(r=>road[r.md]=r);D.pedcal.forEach(r=>ped[r.md]=r);
+const SER={
+  "c-kp":{label:"children (pedestrians)",get:md=>ped[md].kids,max:80,ticks:[0,20,40,60,80]},
+  "c-kr":{label:"children (all road deaths)",get:md=>road[md].kids,max:360,ticks:[0,100,200,300]},
+  "c-ar":{label:"people (all road deaths)",get:md=>road[md].all,max:3600,ticks:[0,1000,2000,3000]}
+};
+const mds=D.roadcal.map(r=>r.md);
+
+// 1. calendar strip with tabs
+function drawCal(id){const S=SER[id],svg=$("cal");svg.innerHTML="";const W=900,H=300,m={l:44,r:6,t:24,b:26},iw=W-m.l-m.r,bw=iw/366;
+  const y=grid(svg,m,W,H,S.max,S.ticks);
+  const start=md=>{const[mo,d]=md.split("-").map(Number);return Math.round((new Date(2000,mo-1,d)-new Date(2000,0,1))/864e5);};
+  const ranked=mds.map(md=>[md,S.get(md)]).sort((a,b)=>b[1]-a[1]);
+  const top=ranked[0];
+  mds.forEach(md=>{const v=S.get(md),i=start(md),hot=md==="10-31";
+    el("rect",{x:m.l+i*bw+.4,y:y(v),width:Math.max(bw-.8,1),height:y(0)-y(v),fill:hot?"var(--series-2)":"var(--series-1)"},svg);
+    const hit=el("rect",{x:m.l+i*bw-.5,y:m.t,width:bw+1,height:H-m.t-m.b,fill:"transparent"},svg);
+    hit.addEventListener("mousemove",ev=>showTip(ev,`<b>${fmt(md)}</b><br>${v.toLocaleString()} ${S.label}`));hit.addEventListener("mouseleave",hide);});
+  const h=start("10-31");
+  el("text",{class:"callout",x:m.l+h*bw-8,y:y(S.get("10-31"))+4,"text-anchor":"end"},svg,`Oct 31: ${S.get("10-31").toLocaleString()}`);
+  if(top[0]!=="10-31"){const i=start(top[0]);el("text",{class:"lbl",x:m.l+i*bw+(i>300?-6:6),y:y(top[1])+4,"text-anchor":i>300?"end":"start"},svg,`${fmt(top[0])}: ${top[1].toLocaleString()}`);}
+  MN.forEach((n,i)=>el("text",{x:m.l+start(`${pad(i+1)}-01`)*bw,y:H-8},svg,n));
+  const rank=ranked.findIndex(r=>r[0]==="10-31")+1,second=ranked[1];
+  const notes={
+    "c-kp":`Halloween stands out in a year that is otherwise flat: a typical day has about 26 child pedestrian deaths and the next-highest has ${second[1]}.`,
+    "c-kr":`Counting children killed in any way on the road (passengers, drivers, cyclists, pedestrians), Halloween ranks #${rank}, behind only ${fmt(top[0])}. After dark, from 6 pm to midnight, it ranks #1 with 158 deaths.`,
+    "c-ar":`For everyone, Halloween ranks #${rank} of 366 days. ${fmt(top[0])} is the deadliest (${top[1].toLocaleString()}), followed by Jan 1 and the days around the Labor Day weekend. The claim to the title belongs to children.`};
+  $("calnote").textContent=notes[id];
+  $("caltable").innerHTML="<table><thead><tr><th>Rank</th><th>Day</th><th>Deaths</th></tr></thead><tbody>"+ranked.slice(0,10).map((r,i)=>`<tr><td>${i+1}</td><td>${fmt(r[0])}</td><td>${r[1].toLocaleString()}</td></tr>`).join("")+"</tbody></table>";}
+drawCal("c-kp");tabs(["c-kp","c-kr","c-ar"],drawCal);
+$("caltoggle").onclick=()=>{const w=$("caltable");w.hidden=!w.hidden;$("caltoggle").textContent=w.hidden?"Show the top 10 days":"Hide the top 10 days";$("caltoggle").setAttribute("aria-expanded",!w.hidden);};
+
+// 2. ratio comparison
+(function(){const svg=$("ratio"),W=900,YRS=25,other=D.n_days-YRS;
+  const rate=g=>{const t=mds.reduce((s,md)=>s+g(md),0),h=g("10-31");return[h/YRS,(t-h)/other];};
+  const rows=[["Child pedestrians, whole day",...rate(md=>ped[md].kids)],
+    ["Child pedestrians, 6 pm–midnight",2.00,2.00/4.36],   // from halloween_compare.py
+    ["Children, all road deaths",...rate(md=>road[md].kids)],
+    ["Pedestrians, all ages",...rate(md=>ped[md].all)],
+    ["Everyone, all road deaths",...rate(md=>road[md].all)]];
+  const m={l:210,r:150},iw=W-m.l-m.r;
+  rows.forEach((r,i)=>{const y0=8+i*56,scale=iw/Math.max(r[1],r[2])*.92,x=r[1]/r[2];
+    el("text",{x:m.l-10,y:y0+25,"text-anchor":"end",class:"lbl"},svg,r[0]);
+    const a=el("rect",{x:m.l,y:y0,width:r[1]*scale,height:19,rx:3,fill:"var(--series-2)"},svg);
+    const b=el("rect",{x:m.l,y:y0+23,width:r[2]*scale,height:19,rx:3,fill:"var(--series-1)"},svg);
+    const f=v=>v>=10?v.toFixed(0):v.toFixed(1);
+    el("text",{x:m.l+r[1]*scale+6,y:y0+14},svg,f(r[1])+" per Oct 31");
+    el("text",{x:m.l+r[2]*scale+6,y:y0+37},svg,f(r[2])+" per other day");
+    el("text",{class:"callout",x:W-6,y:y0+27,"text-anchor":"end",style:"font-size:20px"},svg,x.toFixed(1)+"×");
+    [a,b].forEach(n=>{n.addEventListener("mousemove",ev=>showTip(ev,`<b>${r[0]}</b><br>Oct 31: ${r[1].toFixed(2)} per year<br>Other days: ${r[2].toFixed(2)} per day`));n.addEventListener("mouseleave",hide);});});
+})();
+
+// 3. map
+(function(){const svg=$("map"),W=900,H=560,pad0=12;
+  const R=Math.PI/180,p1=29.5*R,p2=45.5*R,p0=37.5*R,l0=-96*R,n=(Math.sin(p1)+Math.sin(p2))/2,C=Math.cos(p1)**2+2*n*Math.sin(p1),r0=Math.sqrt(C-2*n*Math.sin(p0))/n;
+  const proj=(lon,lat)=>{const r=Math.sqrt(C-2*n*Math.sin(lat*R))/n,t=n*(lon*R-l0);return[r*Math.sin(t),-(r0-r*Math.cos(t))];};
+  const skip=["Alaska","Hawaii","Puerto Rico"],polys=[];
+  D.states.features.filter(f=>!skip.includes(f.properties.name)).forEach(f=>{const g=f.geometry;(g.type==="Polygon"?[g.coordinates]:g.coordinates).forEach(p=>polys.push(p));});
+  let x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;const P=polys.map(p=>p.map(ring=>ring.map(([lo,la])=>{const q=proj(lo,la);x0=Math.min(x0,q[0]);x1=Math.max(x1,q[0]);y0=Math.min(y0,q[1]);y1=Math.max(y1,q[1]);return q;})));
+  const s=Math.min((W-2*pad0)/(x1-x0),(H-2*pad0)/(y1-y0)),ox=(W-(x1-x0)*s)/2,oy=(H-(y1-y0)*s)/2;
+  const X=q=>ox+(q[0]-x0)*s,Y=q=>oy+(q[1]-y0)*s;
+  const g=el("g",{class:"states"},svg);
+  P.forEach(p=>el("path",{d:p.map(ring=>"M"+ring.map(q=>X(q).toFixed(1)+","+Y(q).toFixed(1)).join("L")+"Z").join("")},g));
+  const pts=D.pts.filter(p=>p.lat>24&&p.lat<50&&p.lon>-125&&p.lon<-66);
+  const layer=el("g",{},svg);
+  function draw(kidsOnly){layer.innerHTML="";
+    const list=pts.filter(p=>!kidsOnly||p.kid).sort((a,b)=>a.kid-b.kid);
+    list.forEach(p=>{const q=proj(p.lon,p.lat),c=el("circle",{cx:X(q).toFixed(1),cy:Y(q).toFixed(1),r:p.kid?5:3.6,fill:p.kid?"var(--series-2)":"var(--series-1)","fill-opacity":p.kid?.9:.7,stroke:"#0e0916","stroke-width":1},layer);
+      c.addEventListener("mousemove",ev=>showTip(ev,`<b>${p.year}</b>${p.kid?" · child":""}<br>${p.age!=null?"Age "+p.age:"Age unknown"} · ${fmtHour(p.hour)}`));c.addEventListener("mouseleave",hide);});
+    const k=pts.filter(p=>p.kid).length;
+    $("mapnote").textContent=kidsOnly?`${k} of 80 child deaths are drawn. The rest have no usable location or occurred in Alaska or Hawaii.`:`${pts.length} of ${D.types.Pedestrian} deaths are drawn (${k} of them children). The rest have no usable location or occurred in Alaska or Hawaii.`;}
+  draw(false);tabs(["m-all","m-kids"],id=>draw(id==="m-kids"));
+})();
+
+// 4. who dies
+(function(){const svg=$("types"),W=900,T=D.types,total=road["10-31"].all;
+  const other=total-T.Driver-T.Pedestrian-T.Passenger-T.Bicyclist;
+  const rows=[["Drivers",T.Driver],["Pedestrians",T.Pedestrian],["Passengers",T.Passenger],["Bicyclists",T.Bicyclist],["Other / unknown",other]];
+  $("typesub").textContent=`${total.toLocaleString()} people died in road crashes on October 31 across 2000–2024. Pedestrians were ${Math.round(T.Pedestrian/total*100)}% of them.`;
+  const m={l:130,r:140},iw=W-m.l-m.r,max=rows[0][1];
+  rows.forEach((r,i)=>{const y=6+i*36,w=r[1]/max*iw,hot=r[0]==="Pedestrians";
+    el("text",{x:m.l-10,y:y+17,"text-anchor":"end",class:"lbl"},svg,r[0]);
+    const b=el("rect",{x:m.l,y,width:w,height:24,rx:3,fill:hot?"var(--series-2)":"var(--series-1)"},svg);
+    el("text",{x:m.l+w+8,y:y+17},svg,`${r[1].toLocaleString()} (${(r[1]/total*100).toFixed(0)}%)`);
+    b.addEventListener("mousemove",ev=>showTip(ev,`<b>${r[0]}</b><br>${r[1].toLocaleString()} deaths`));b.addEventListener("mouseleave",hide);});
+})();
+
+// 5. weekday
+const wk=$("wk");
+function drawWk(key){wk.innerHTML="";const W=900,H=290,m={l:34,r:8,t:24,b:44},iw=W-m.l-m.r;
+  const hk=key==="kids"?"kids_per":"all_per",bk=key==="kids"?"base_kids":"base_all",max=key==="kids"?5:30,ticks=key==="kids"?[0,1,2,3,4,5]:[0,10,20,30];
+  const y=grid(wk,m,W,H,max,ticks),sw=iw/7;
+  D.weekday.forEach((r,i)=>{const x0=m.l+i*sw,bw=sw*0.34;
+    [[r[hk],"var(--series-2)",x0+sw*.12,`Halloween on a ${r.day}`],[r[bk],"var(--series-1)",x0+sw*.12+bw+3,`Any other ${r.day}`]].forEach(([v,c,x,l])=>{
+      const rc=el("rect",{x,y:y(v),width:bw,height:y(0)-y(v),rx:3,fill:c},wk);
+      el("text",{class:"lbl",x:x+bw/2,y:y(v)-5,"text-anchor":"middle"},wk,v.toFixed(1));
+      rc.addEventListener("mousemove",ev=>showTip(ev,`<b>${l}</b><br>${v.toFixed(2)} per day`+(l.startsWith("Hall")?`<br>${r.n} Halloweens: ${r.years.join(", ")}`:"")));rc.addEventListener("mouseleave",hide);});
+    el("text",{x:x0+sw/2,y:H-24,"text-anchor":"middle",class:"lbl"},wk,r.day);
+    el("text",{x:x0+sw/2,y:H-8,"text-anchor":"middle"},wk,r.n+" yrs");});
+  const s=D.weekday[5];
+  $("satnote").innerHTML= key==="kids"
+    ? `<b>Saturday Halloweens (${s.years.join(", ")}):</b> ${s.kids} children died in total, 2.7 per Halloween. That is not higher than the 3.3 average on other weekdays. Only three Saturday Halloweens exist in this period, so the count is too small to say Saturdays are safer or riskier.`
+    : `<b>Saturday Halloweens:</b> ${s.all_per.toFixed(1)} pedestrian deaths per Halloween, against ${s.base_all.toFixed(1)} on an ordinary Saturday (1.3×), a smaller jump than weekday Halloweens get, because Saturdays are already deadly. Three years only.`;}
+drawWk("kids");tabs(["t-kids","t-all"],id=>drawWk(id==="t-kids"?"kids":"all"));
+
+// 6. yearly stacked
+(function(){const svg=$("yr"),W=900,H=300,m={l:34,r:8,t:12,b:26},iw=W-m.l-m.r,bw=iw/D.years.length;
+  const y=grid(svg,m,W,H,30,[0,10,20,30]);
+  D.years.forEach((r,i)=>{const x=m.l+i*bw+bw*.18,w=bw*.64,a=r.all-r.kids;
+    el("rect",{x,y:y(a),width:w,height:y(0)-y(a),rx:3,fill:"var(--series-1)"},svg);
+    if(r.kids)el("rect",{x,y:y(r.all),width:w,height:y(a)-y(r.all)-2,rx:3,fill:"var(--series-2)"},svg);
+    const hit=el("rect",{x:m.l+i*bw,y:m.t,width:bw,height:H-m.t-m.b,fill:"transparent"},svg);
+    hit.addEventListener("mousemove",ev=>showTip(ev,`<b>${r.year}</b> (${r.wd})<br>Under 18: ${r.kids}<br>18+ / unknown: ${a}<br>Total: ${r.all}`));hit.addEventListener("mouseleave",hide);
+    if(r.year%2===0||r.year===2024)el("text",{x:x+w/2,y:H-8,"text-anchor":"middle"},svg,r.year);});
+  $("tablewrap").innerHTML="<table><thead><tr><th>Year</th><th>Weekday</th><th>Under 18</th><th>18+ / unknown</th><th>Total</th></tr></thead><tbody>"+D.years.map(r=>`<tr><td>${r.year}</td><td>${r.wd}</td><td>${r.kids}</td><td>${r.all-r.kids}</td><td>${r.all}</td></tr>`).join("")+"</tbody></table>";
+  const b=$("toggle"),w=$("tablewrap");
+  b.onclick=()=>{w.hidden=!w.hidden;b.textContent=w.hidden?"Show data table":"Hide data table";b.setAttribute("aria-expanded",!w.hidden);};
+})();
+</script>
+</body>
+</html>
